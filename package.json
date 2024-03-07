@@ -1,0 +1,21 @@
+{
+  "name": "next-server-action-redirect-issue",
+  "version": "0.1.0",
+  "description": "Fancy Next.js app",
+  "scripts": {
+    "start": "next build && NODE_TLS_REJECT_UNAUTHORIZED=0 NODE_NO_WARNINGS=1 next start 2> stderr",
+    "nginx": "docker build --quiet -t next-server-action-redirect-issue --build-arg MY_DOCKER_HOST=${MY_DOCKER_HOST:-host.docker.internal} . && docker run -p 443:443 --rm next-server-action-redirect-issue",
+    "test:playwright": "playwright test",
+    "test:run": "START_SERVER_AND_TEST_INSECURE=1 start-server-and-test start 3000 nginx https://localhost test:playwright",
+    "test": "npm run test:run && test -s stderr && cat stderr && exit 1 || exit 0"
+  },
+  "dependencies": {
+    "next": "14.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.42.1",
+    "start-server-and-test": "^1.15.4"
+  }
+}
